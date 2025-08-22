@@ -1,5 +1,7 @@
+crpalmer-fc42.aarch64.iso
 Fedora-Workstation-Live-42-1.1.aarch64.iso
-updates/LiveOS/squashfs.img
 iso
 liveos
-crpalmer-fc42.aarch64.iso
+liveiso.patches
+liveos.patched
+updates

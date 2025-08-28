@@ -31,6 +31,9 @@ liveos.patched:
 	sudo cp -r /lib/modules/$(KERNEL_VERSION) liveos.patched/lib/modules/
 	# TODO: compress
 	# find livesos.patched/lib/modules -name '*.ko' -exec xz {} \; -exec rm -f {} \;
+	# Firmware
+	sudo rm -rf $@/lib/firmware
+	sudo cp -rp /lib/firmware $@/lib/
 
 liveos: iso
 	mkdir -p liveos.mnt

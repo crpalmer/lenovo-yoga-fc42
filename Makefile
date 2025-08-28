@@ -1,27 +1,36 @@
-all: liveos liveiso.patches
+KERNEL_VERSION=6.16.2+
+
+all:
+	$(MAKE) liveos 
+	$(MAKE) liveiso.patches 
+	$(MAKE) mkiso
+
+.PHONY: mkiso
+mkiso:
 	rm -rf crpalmer-fc42.aarch64.iso
-	cd liveiso.patches && \
-	sudo mkksiso --skip-mkefiboot \
-		-a . \
-		../Fedora-Workstation-Live-42-1.1.aarch64.iso ../crpalmer-fc42.aarch64.iso
+	cd liveiso.patches && sudo ../mkksiso.sh $(KERNEL_VERSION)
 
 .PHONY: liveiso.patches
-liveiso.patches: 
-	mkdir -p liveos.patches
+liveiso.patches: liveos.patched
+	sudo rm -rf $@
 	# kernel:
-	mkdir -p liveiso.patches/boot/aarch64/loader
-	sudo cp -p /boot/vmlinuz-6.16.1+ liveiso.patches/boot/aarch64/loader/linux
-	sudo cp -p /boot/initramfs-6.16.1+.img liveiso.patches/boot/aarch64/loader/initrd
+	mkdir -p $@/boot/aarch64/loader $@/boot/dtbs
+	sudo cp -p /boot/vmlinuz-$(KERNEL_VERSION) $@/boot/aarch64/loader/linux
+	sudo cp -p /boot/initramfs-$(KERNEL_VERSION).img $@/boot/aarch64/loader/initrd
+	sudo cp -pr /boot/dtbs/$(KERNEL_VERSION) $@/boot/dtbs/
 	# liveos
-	sudo mkdir -p liveiso.patches/LiveOS
-	sudo mkfs.erofs -z zstd,3 liveiso.patches/LiveOS/squashfs.img liveos.patched
+	sudo mkdir -p $@/LiveOS
+	sudo mkfs.erofs -z zstd,3 $@/LiveOS/squashfs.img liveos.patched
 
 .PHONY: liveos.patched
 liveos.patched:
 	sudo rm -rf liveos.patched
 	sudo cp -rp liveos liveos.patched
+	sudo du -hs liveos liveos.patched
 	# Modules
-	sudo cp -r /lib/modules/6.16.1+ liveos.patched/lib/modules/
+	sudo cp -r /lib/modules/$(KERNEL_VERSION) liveos.patched/lib/modules/
+	# TODO: compress
+	# find livesos.patched/lib/modules -name '*.ko' -exec xz {} \; -exec rm -f {} \;
 
 liveos: iso
 	mkdir -p liveos.mnt

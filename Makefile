@@ -24,11 +24,10 @@ liveiso.patches: liveos.patched
 
 .PHONY: liveos.patched
 liveos.patched:
-	sudo rm -rf liveos.patched
-	sudo cp -rp liveos liveos.patched
-	sudo du -hs liveos liveos.patched
+	sudo rm -rf $@
+	sudo cp -rp liveos $@
 	# Modules
-	sudo cp -r /lib/modules/$(KERNEL_VERSION) liveos.patched/lib/modules/
+	sudo cp -r /lib/modules/$(KERNEL_VERSION) $@/lib/modules/
 	# TODO: compress
 	# find livesos.patched/lib/modules -name '*.ko' -exec xz {} \; -exec rm -f {} \;
 	# Firmware

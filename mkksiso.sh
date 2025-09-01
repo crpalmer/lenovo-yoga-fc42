@@ -8,7 +8,6 @@ fi
 sudo mkksiso --skip-mkefiboot \
 	-a boot \
 	-a LiveOS \
-	--cmdline "modprobe.blacklist=qcom_q6v5_pas rd.driver.blacklist=qcom_q6v5_pas" \
 	--replace 'initrd ' "devicetree /boot/dtbs/$1/qcom/x1e80100-lenovo-yoga-slim7x.dtb 
 initrd " \
 	--rm-args "quiet rhgb" \

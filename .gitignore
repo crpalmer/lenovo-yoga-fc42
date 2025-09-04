@@ -5,3 +5,6 @@ liveos
 liveiso.patches
 liveos.patched
 updates
+initrd
+initramfs
+initrd.patched

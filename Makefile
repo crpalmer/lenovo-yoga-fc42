@@ -62,11 +62,15 @@ initramfs:
 liveos: iso
 	mkdir -p liveos.mnt
 	sudo mount iso/LiveOS/squashfs.img liveos.mnt
-	sudo cp -rp liveos.mnt liveos
+	sudo rm -rf $@
+	sudo cp -rp liveos.mnt $@
 	sudo umount liveos.mnt
+	sudo rm -rf liveos.mnt
 
 iso: Fedora-Workstation-Live-42-1.1.aarch64.iso
 	mkdir -p iso.mnt
 	sudo mount -o loop ./Fedora-Workstation-Live-42-1.1.aarch64.iso iso.mnt/
-	sudo cp -rp iso.mnt iso
+	sudo rm -rf $@
+	sudo cp -rp iso.mnt $@
 	sudo umount iso.mnt
+	sudo rm -rf iso.mnt

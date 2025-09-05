@@ -44,9 +44,9 @@ liveiso.patches/boot/aarch64/loader/initrd:
 initrd.patched: initrd initramfs
 	sudo rm -rf $@
 	sudo cp -rp initrd $@
-	sudo rm -rf $@/lib/firmware $@/lib/modules
+	sudo rm -rf $@/lib/firmware $@/lib/modules/*
 	sudo cp -rp initramfs/lib/firmware $@/lib/
-	sudo cp -rp initramfs/lib/modules $@/lib/
+	sudo cp -rp /lib/modules/$(KERNEL_VERSION) $@/lib/modules/
 
 initrd: iso/boot/aarch64/loader/initrd
 	rm -rf $@

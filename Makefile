@@ -1,5 +1,8 @@
 KERNEL_VERSION=6.17.0-rc4-raw+
 
+CP_P  = cp --preserve=all
+CP_RP = $(CP_P) -r
+
 all:
 	$(MAKE) liveos 
 	$(MAKE) liveiso.patches 
@@ -15,9 +18,9 @@ liveiso.patches:
 	sudo rm -rf $@
 	# kernel:
 	mkdir -p $@/boot/aarch64/loader $@/boot/dtbs
-	sudo cp -p /boot/vmlinuz-$(KERNEL_VERSION) $@/boot/aarch64/loader/linux
+	sudo $(CP_P) /boot/vmlinuz-$(KERNEL_VERSION) $@/boot/aarch64/loader/linux
 	make $@/boot/aarch64/loader/initrd
-	sudo cp -pr /boot/dtbs/$(KERNEL_VERSION) $@/boot/dtbs/
+	sudo $(CP_RP) /boot/dtbs/$(KERNEL_VERSION) $@/boot/dtbs/
 	# liveos
 	make liveos.patched
 	sudo mkdir -p $@/LiveOS
@@ -26,13 +29,13 @@ liveiso.patches:
 .PHONY: liveos.patched
 liveos.patched:
 	sudo rm -rf $@
-	sudo cp -rp liveos $@
+	sudo $(CP_RP) liveos $@
 	# Modules
 	sudo rm -rf $@/lib/modules/*
-	sudo cp -rp /lib/modules/$(KERNEL_VERSION) $@/lib/modules/
+	sudo $(CP_RP) /lib/modules/$(KERNEL_VERSION) $@/lib/modules/
 	# Firmware
 	sudo rm -rf $@/lib/firmware
-	sudo cp -rp /lib/firmware $@/lib/
+	sudo $(CP_RP) /lib/firmware $@/lib/
 
 .PHONY: liveiso.patches/boot/aarch64/loader/initrd
 liveiso.patches/boot/aarch64/loader/initrd:
@@ -43,10 +46,10 @@ liveiso.patches/boot/aarch64/loader/initrd:
 .PHONY: initrd.patched
 initrd.patched: initrd initramfs
 	sudo rm -rf $@
-	sudo cp -rp initrd $@
+	sudo $(CP_RP) initrd $@
 	sudo rm -rf $@/lib/firmware $@/lib/modules/*
-	sudo cp -rp initramfs/lib/firmware $@/lib/
-	sudo cp -rp /lib/modules/$(KERNEL_VERSION) $@/lib/modules/
+	sudo $(CP_RP) initramfs/lib/firmware $@/lib/
+	sudo $(CP_RP) /lib/modules/$(KERNEL_VERSION) $@/lib/modules/
 
 initrd: iso/boot/aarch64/loader/initrd
 	rm -rf $@
@@ -63,7 +66,7 @@ liveos: iso
 	mkdir -p liveos.mnt
 	sudo mount iso/LiveOS/squashfs.img liveos.mnt
 	sudo rm -rf $@
-	sudo cp -rp liveos.mnt $@
+	sudo $(CP_RP) liveos.mnt $@
 	sudo umount liveos.mnt
 	sudo rm -rf liveos.mnt
 
@@ -71,6 +74,6 @@ iso: Fedora-Workstation-Live-42-1.1.aarch64.iso
 	mkdir -p iso.mnt
 	sudo mount -o loop ./Fedora-Workstation-Live-42-1.1.aarch64.iso iso.mnt/
 	sudo rm -rf $@
-	sudo cp -rp iso.mnt $@
+	sudo $(CP_RP) iso.mnt $@
 	sudo umount iso.mnt
 	sudo rm -rf iso.mnt

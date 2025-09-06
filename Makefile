@@ -1,4 +1,4 @@
-KERNEL_VERSION=6.17.0-rc4-raw+
+KERNEL_VERSION=6.16.5
 
 CP_P  = cp --preserve=all
 CP_RP = $(CP_P) -r

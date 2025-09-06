@@ -69,6 +69,7 @@ liveos: iso
 	sudo $(CP_RP) liveos.mnt $@
 	sudo umount liveos.mnt
 	sudo rm -rf liveos.mnt
+	sudo touch $@
 
 iso: Fedora-Workstation-Live-42-1.1.aarch64.iso
 	mkdir -p iso.mnt
@@ -77,3 +78,4 @@ iso: Fedora-Workstation-Live-42-1.1.aarch64.iso
 	sudo $(CP_RP) iso.mnt $@
 	sudo umount iso.mnt
 	sudo rm -rf iso.mnt
+	sudo touch $@
